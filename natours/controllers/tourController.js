@@ -1,4 +1,3 @@
-const { json } = require("express");
 const Tour = require("./../models/tourModels");
 const APIFeatures = require("./../utils/apiFeatures");
 const catchAsync = require("./../utils/catchAsync");

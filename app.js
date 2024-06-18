@@ -10,7 +10,7 @@ const AppError = require("./natours/utils/appError");
 const globalErrorHandler = require("./natours/controllers/errorController");
 const tourRouter = require("./natours/routes/tourRoutes");
 const userRouter = require("./natours/routes/userRoutes");
-
+const reviewRouter = require("./natours/routes/reviewRoutes");
 const app = express();
 
 // GLOBAL MIDDELWARES
@@ -69,6 +69,7 @@ app.use(express.static(`${__dirname}/public`));
 // ROUTES
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/tours", tourRouter);
+app.use("/api/v1/reviews", reviewRouter);
 
 app.all("*", (req, res, next) => {
   next(new AppError(`Cant find ${req.originalUrl} on this server!`), 404);

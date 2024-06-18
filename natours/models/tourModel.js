@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
-const validator = require("validator");
+// const User = require("./userModel");
+// const validator = require("validator");
 
-const tourSchmema = new mongoose.Schema(
+const tourSchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -13,7 +14,7 @@ const tourSchmema = new mongoose.Schema(
         "A tour name must have less or equal than 40 characters.",
       ],
       minLength: [10, "A tour name must have 10 or more characters."],
-      validate: validator.isAlpha,
+      // validate: validator.isAlpha,
     },
     duration: {
       type: Number,
@@ -79,6 +80,31 @@ const tourSchmema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    startLoctaion: {
+      // GeoJSON
+      type: {
+        type: String,
+        default: "Point",
+        enum: ["Point"],
+      },
+      coordinates: [Number],
+      address: String,
+      description: String,
+    },
+    locations: [
+      {
+        type: {
+          type: String,
+          default: "Point",
+          enum: ["Point"],
+        },
+        coordinates: [Number],
+        address: String,
+        description: String,
+        day: Number,
+      },
+    ],
+    guides: [{ type: mongoose.Schema.ObjectId, ref: "User" }],
   },
   {
     toJSON: { virtuals: true },
@@ -86,6 +112,28 @@ const tourSchmema = new mongoose.Schema(
   }
 );
 
-const Tour = mongoose.model("Tour", tourSchmema);
+// tourSchema.pre("save", async function (next) {
+//   const guidesPromises = this.guides.map(async (id) => User.findById(id));
+//   this.guides = await Promise.all(guidesPromises);
+//   console.log("💯💯💯💯💯💯💯💯💯💯💯💯");
+//   next();
+// });
+
+tourSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: "guides",
+    select: "-__v",
+  });
+  next();
+});
+
+// Virtual Populate
+tourSchema.virtual("reviews", {
+  ref: "Review",
+  foreignField: "tour",
+  localField: "_id",
+});
+
+const Tour = mongoose.model("Tour", tourSchema);
 
 module.exports = Tour;

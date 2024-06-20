@@ -81,7 +81,7 @@ const tourSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    startLoctaion: {
+    startLocation: {
       // GeoJSON
       type: {
         type: String,
@@ -121,6 +121,7 @@ const tourSchema = new mongoose.Schema(
 // });
 
 tourSchema.index({ price: 1, ratingsAverage: -1 });
+tourSchema.index({ startLocation: "2dsphere" });
 
 tourSchema.pre(/^find/, function (next) {
   this.populate({

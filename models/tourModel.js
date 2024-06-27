@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const slugify = require("slugify");
 // const User = require("./userModel");
 // const validator = require("validator");
 
@@ -16,6 +17,7 @@ const tourSchema = new mongoose.Schema(
       minLength: [10, "A tour name must have 10 or more characters."],
       // validate: validator.isAlpha,
     },
+    slug: String,
     duration: {
       type: Number,
       required: [true, "A tour must have a duration"],
@@ -122,6 +124,20 @@ const tourSchema = new mongoose.Schema(
 
 tourSchema.index({ price: 1, ratingsAverage: -1 });
 tourSchema.index({ startLocation: "2dsphere" });
+tourSchema.index({ slug: 1 });
+
+// Virtual Populate
+tourSchema.virtual("reviews", {
+  ref: "Review",
+  foreignField: "tour",
+  localField: "_id",
+});
+
+// DOCUMENT MIDDLEWARE: runs before .save() and .create()
+tourSchema.pre('save', function(next) {
+  this.slug = slugify(this.name, { lower: true });
+  next();
+});
 
 tourSchema.pre(/^find/, function (next) {
   this.populate({
@@ -131,12 +147,6 @@ tourSchema.pre(/^find/, function (next) {
   next();
 });
 
-// Virtual Populate
-tourSchema.virtual("reviews", {
-  ref: "Review",
-  foreignField: "tour",
-  localField: "_id",
-});
 
 const Tour = mongoose.model("Tour", tourSchema);
 

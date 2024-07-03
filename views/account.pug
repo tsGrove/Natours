@@ -13,7 +13,7 @@ block content
         nav.user-view__menu
         ul.side-nav
             +navItem('#', 'Settings', 'settings', true)
-            +navItem('#', 'My Bookings', 'briefcase')
+            +navItem('/my-tours', 'My Bookings', 'briefcase')
             +navItem('#', 'My Reviews', 'star')
             +navItem('#', 'Billing', 'credit-card')
 
@@ -25,6 +25,7 @@ block content
                     +navItem('#', 'Manage Users', 'users')
                     +navItem('#', 'Manage Reviews', 'star')
                     +navItem('#', 'Manage Bookings', 'briefcase')
+                    
                         
 
     .user-view__content

@@ -6,6 +6,8 @@ DB_USERNAME + DB_PASSWORD : A MongoDB account with username and password
 DB_CONNECTION_STRING : Connection to compass to view the database  
 SENDGRID_USERNAME + SENDGRID_PASSWORD : Sendgrid for email automation when users sign up and forget password  
 STRIPE_SECRET_KEY : A strip API key for purchase functionality  
+Once env variables have been set, run the script "node ./src/dev-data/data/import-dev-data.js --import" to populate the database with some mock data,  
+and "npm start" to run the server in developer mode, or "set NODE_ENV=production&&nodemon server.js" to run in production mode.
 
 ![image](https://github.com/user-attachments/assets/109211b6-0ef6-4414-b03b-bc291b352ab6)
 
